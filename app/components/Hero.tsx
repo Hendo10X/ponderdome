@@ -28,7 +28,7 @@ export function Hero() {
           Get started now
         </button>
         
-        <div className="w-full max-w-2xl px-4 flex justify-center mb-8">
+        <div className="w-full max-w-2xl flex justify-center mb-8">
            <Image
              src="/Group 60.svg"
              alt="Ponderdome Card Preview"
