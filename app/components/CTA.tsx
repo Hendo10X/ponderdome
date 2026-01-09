@@ -8,11 +8,11 @@ export function CTA() {
         <p className="text-ponder-charcoal text-base md:text-lg max-w-lg mb-8 leading-relaxed">
           Join thousands of others currently staring at their bathroom tiles. It's free, it's weird, and it's waiting for you.
         </p>
-        <div className="flex flex-row gap-2 md:gap-3 w-full justify-center">
-          <button className="bg-ponder-blue text-white text-xs sm:text-sm md:text-base font-semibold px-4 py-3 md:px-8 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap">
+        <div className="flex flex-col md:flex-row gap-4 w-full justify-center items-center">
+          <button className="bg-ponder-blue text-white text-base md:text-lg font-semibold px-8 py-3.5 w-full md:w-auto rounded-full hover:opacity-90 transition-opacity">
             Yes, why not?
           </button>
-          <button className="bg-[#E5E5E5] text-ponder-charcoal text-xs sm:text-sm md:text-base font-semibold px-4 py-3 md:px-8 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap">
+          <button className="bg-[#E5E5E5] text-ponder-charcoal text-base md:text-lg font-semibold px-8 py-3.5 w-full md:w-auto rounded-full hover:opacity-90 transition-opacity">
             Request for something
           </button>
         </div>
