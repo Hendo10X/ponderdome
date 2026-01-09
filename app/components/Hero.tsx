@@ -5,7 +5,7 @@ export function Hero() {
     <div className="flex flex-col items-center text-center max-w-3xl mx-auto gap-2">
       <div className="mb-4">
         <Image 
-          src="/Logo.svg" 
+          src="/Logo2.svg" 
           alt="Ponderdome Logo" 
           width={64} 
           height={64}
