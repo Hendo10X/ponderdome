@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import Link from "next/link";
 export function Hero() {
   return (
     <div className="flex flex-col items-center text-center max-w-3xl mx-auto gap-2">
@@ -24,9 +24,11 @@ export function Hero() {
       </div>
 
       <div className="flex flex-col items-center gap-8 mt-6 w-full">
+        <Link href="/sign-up">
         <button className="bg-primary text-primary-foreground text-base font-semibold px-6 py-2.5 rounded-full hover:opacity-90 transition-all cursor-pointer">
           Get started now
         </button>
+        </Link>
         
         <div className="w-full max-w-2xl flex justify-center mb-8">
            <Image
