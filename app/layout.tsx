@@ -33,6 +33,8 @@ export const metadata: Metadata = {
   description: "The arena for your deepest distractions.",
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,9 +43,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${openRunde.variable} antialiased`}
+        className={`${openRunde.variable} font-sans antialiased`}
       >
         {children}
+        <Toaster
+          richColors
+          position="top-center"
+          toastOptions={{
+            style: { boxShadow: "none" },
+          }}
+        />
       </body>
     </html>
   );
