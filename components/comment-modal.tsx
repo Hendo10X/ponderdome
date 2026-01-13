@@ -1,10 +1,16 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, X } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { getComments, createComment } from "@/lib/actions";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
 
 interface Comment {
   id: string;
@@ -39,7 +45,9 @@ export default function CommentModal({
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
+  // Reset state when opening
   useEffect(() => {
     if (isOpen && postId) {
       setLoading(true);
@@ -72,36 +80,24 @@ export default function CommentModal({
       setNewComment(prev => prev ? prev + " " + emoji : emoji);
   };
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-            onClick={onClose}
-          />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-xl z-50 flex flex-col max-h-[80vh]"
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-100">
+  const Content = (
+    <div className="flex flex-col h-full max-h-[80vh] md:max-h-[600px] w-full">
+         {/* Header (Desktop only inside modal, Drawer has its own) */}
+         {isDesktop && (
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 flex-shrink-0">
               <h3 className="font-bold text-lg">Comments</h3>
               <button
                 onClick={onClose}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
-
-            {/* Comments List */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+         )}
+         
+         {/* Comments List */}
+         <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
               {loading ? (
                 <div className="text-center py-10 text-gray-400">Loading comments...</div>
               ) : comments.length === 0 ? (
@@ -123,19 +119,18 @@ export default function CommentModal({
                   </div>
                 ))
               )}
-            </div>
+         </div>
 
-            {/* Suggestions & Input */}
-            <div className="p-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl space-y-3">
-             {/* Suggestions */}
-              <div className="flex gap-2 justify-start items-center">
+         {/* Suggestions & Input */}
+         <div className="p-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl md:rounded-b-2xl space-y-3 flex-shrink-0">
+             <div className="flex gap-2 justify-start items-center overflow-x-auto pb-1 scrollbar-none">
                   {SUGGESTED_COMMENTS.map((emoji, index) => (
                       <motion.button 
                         key={index}
                         whileTap={{ scale: 0.8, transition: { type: "spring", stiffness: 400, damping: 10 } }}
                         whileHover={{ scale: 1.1 }}
                         onClick={() => handleSuggestionClick(emoji)}
-                        className="flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-full text-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                        className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-full text-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                         type="button"
                       >
                           {emoji}
@@ -162,10 +157,44 @@ export default function CommentModal({
                     </button>
                  </div>
               </form>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+         </div>
+    </div>
+  );
+
+  if (isDesktop) {
+    return (
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+              onClick={onClose}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-xl z-50 flex flex-col max-h-[80vh]"
+            >
+              {Content}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    );
+  }
+
+  return (
+    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DrawerContent>
+        <DrawerHeader className="border-b border-gray-100 pb-4">
+          <DrawerTitle className="text-center">Comments</DrawerTitle>
+        </DrawerHeader>
+        {Content}
+      </DrawerContent>
+    </Drawer>
   );
 }
