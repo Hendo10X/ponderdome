@@ -111,9 +111,9 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col items-center pt-24 overflow-hidden relative">
+    <div className="h-screen bg-gray-50 flex flex-col items-center pt-14 md:pt-24 overflow-hidden relative">
       {/* Tabs */}
-      <div className="flex-none flex space-x-12 mb-6 relative z-10">
+      <div className="flex-none flex space-x-12 mb-4 md:mb-6 relative z-10">
         {tabs.map((tab) => (
           <button
             key={tab.id}
