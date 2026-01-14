@@ -11,6 +11,7 @@ import { getFeed, toggleLike } from "@/lib/actions";
 import { Heart, MessageSquare, Plus } from "lucide-react";
 import CommentModal from "@/components/comment-modal";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ProfileView from "@/components/profile-view";
 
 type Tab = "feed" | "leaderboard" | "profile";
 
@@ -111,9 +112,12 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col items-center pt-14 md:pt-24 overflow-hidden relative">
+    <div className={cn(
+        "bg-gray-50 flex flex-col items-center pt-14 md:pt-24 relative w-full overflow-x-hidden",
+        activeTab === "profile" ? "min-h-screen" : "h-screen overflow-hidden"
+    )}>
       {/* Tabs */}
-      <div className="flex-none flex space-x-12 mb-4 md:mb-6 relative z-10">
+      <div className="flex-none flex space-x-6 md:space-x-12 mb-4 md:mb-6 relative z-10">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -139,16 +143,35 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
 
       {/* Content */}
       <div className="flex-1 w-full max-w-lg min-h-0">
-        <ScrollArea className="h-full px-4 pb-10">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="w-full text-left pb-32"
-            >
+        <AnimatePresence mode="wait">
+            {activeTab === "profile" ? (
+                 <motion.div
+                    key="profile"
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full pb-32"
+                 >
+                     <ProfileView user={user} />
+                 </motion.div>
+            ) : (
+                <motion.div
+                    key="main-wrapper"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="h-full"
+                >
+                    <ScrollArea className="h-full px-4 pb-10">
+                        <motion.div
+                        key={activeTab}
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -10, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="w-full text-left pb-32"
+                        >
             {activeTab === "feed" && (
               <>
                 {!loading && posts.length === 0 ? (
@@ -198,38 +221,16 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
                                     </div>
                                 </div>
                             ))}
-                        </div>
-                    )}
-                </div>
+                    </div>
+                 )}
+               </div>
             )}
 
-            {activeTab === "profile" && (
-              <div className="flex flex-col items-center justify-center space-y-4 pt-10 text-center">
-                <div className="relative w-24 h-24 rounded-full overflow-hidden bg-gray-200 ring-2 ring-offset-2 ring-gray-100">
-                  {user.image ? (
-                    <Image
-                      src={user.image}
-                      alt={user.name || "User"}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">
-                      {(user.name?.[0] || "U").toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    {user.username || user.name}
-                  </h2>
-                  <p className="text-gray-500">{user.email}</p>
-                </div>
-              </div>
+                        </motion.div>
+                    </ScrollArea>
+                </motion.div>
             )}
-          </motion.div>
         </AnimatePresence>
-      </ScrollArea>
       </div>
 
       {/* Floating Create Button */}

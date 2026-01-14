@@ -237,3 +237,63 @@ export async function createComment(postId: string, content: string) {
 
     revalidatePath("/dashboard");
 }
+
+import { getUserRank } from "@/lib/utils";
+
+export async function updateProfile(bio: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  await db
+    .update(user)
+    .set({ bio })
+    .where(eq(user.id, session.user.id));
+
+  revalidatePath("/dashboard");
+}
+
+export async function getUserStats(userId: string) {
+  // Aggregate stats
+  const userPosts = await db.query.post.findMany({
+    where: eq(post.userId, userId),
+  });
+
+  const totalPosts = userPosts.length;
+  const totalLikes = userPosts.reduce((sum, p) => sum + p.likesCount, 0);
+  const rank = getUserRank(totalLikes);
+
+  // Get most popular post
+  const popularPost = await db.query.post.findFirst({
+    where: eq(post.userId, userId),
+    orderBy: (posts, { desc }) => [desc(posts.likesCount)],
+    with: {
+      author: true, // Need author for PostCard if we reuse it
+    }
+  });
+
+  // Get user details for bio
+  const userDetails = await db.query.user.findFirst({
+    where: eq(user.id, userId),
+    columns: { bio: true } // Only fetch bio if needed
+  });
+
+  return {
+    totalPosts,
+    totalLikes,
+    rank,
+    popularPost: popularPost ? {
+        ...popularPost,
+        author: {
+           ...popularPost.author,
+           totalLikes: 0, // Not needed for single display or fetched separately
+           rank: null 
+        }
+    } : null,
+    bio: userDetails?.bio || ""
+  };
+}

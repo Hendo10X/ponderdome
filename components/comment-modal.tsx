@@ -84,20 +84,20 @@ export default function CommentModal({
     <div className="flex flex-col h-full max-h-[80vh] md:max-h-[600px] w-full">
          {/* Header (Desktop only inside modal, Drawer has its own) */}
          {isDesktop && (
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 flex-shrink-0">
+            <div className="flex items-center justify-between p-5 flex-shrink-0">
               <h3 className="font-bold text-lg">Comments</h3>
               <button
                 onClick={onClose}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="Close"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-gray-400" />
               </button>
             </div>
          )}
          
          {/* Comments List */}
-         <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+         <div className="flex-1 overflow-y-auto px-5 space-y-4 min-h-0">
               {loading ? (
                 <div className="text-center py-10 text-gray-400">Loading comments...</div>
               ) : comments.length === 0 ? (
@@ -122,16 +122,17 @@ export default function CommentModal({
          </div>
 
          {/* Suggestions & Input */}
-         <div className="p-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl md:rounded-b-2xl space-y-3 flex-shrink-0">
+         <div className="p-5 space-y-3 flex-shrink-0">
              <div className="flex gap-2 justify-start items-center overflow-x-auto pb-1 scrollbar-none">
                   {SUGGESTED_COMMENTS.map((emoji, index) => (
                       <motion.button 
                         key={index}
-                        whileTap={{ scale: 0.8, transition: { type: "spring", stiffness: 400, damping: 10 } }}
+                        whileTap={{ scale: 0.9 }}
                         whileHover={{ scale: 1.1 }}
                         onClick={() => handleSuggestionClick(emoji)}
-                        className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-white border border-gray-200 rounded-full text-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                        className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full text-xl cursor-pointer hover:bg-gray-50 transition-colors"
                         type="button"
+                        aria-label={`Add emoji ${emoji}`}
                       >
                           {emoji}
                       </motion.button>
@@ -145,15 +146,15 @@ export default function CommentModal({
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Add a comment..."
-                        className="w-full pl-4 pr-10 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-purple-300 font-medium text-sm"
+                        className="w-full pl-4 pr-12 py-3 rounded-3xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-100 font-medium text-sm transition-all"
                         disabled={submitting}
                     />
                     <button 
                         type="submit"
                         disabled={submitting || !newComment.trim()}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-purple-500 hover:bg-purple-600 text-white rounded-full p-1.5 transition-colors disabled:opacity-50 disabled:bg-gray-300"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-900 hover:bg-black text-white rounded-full p-2 transition-all disabled:opacity-30 disabled:hover:bg-gray-900"
                     >
-                        <ArrowUp className="w-3.5 h-3.5" />
+                        <ArrowUp className="w-4 h-4" />
                     </button>
                  </div>
               </form>
