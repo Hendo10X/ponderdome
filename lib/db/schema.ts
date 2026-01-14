@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -9,6 +10,7 @@ export const user = pgTable("user", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   username: text("username").unique(), // Added username field
+  bio: text("bio"), // Added bio field for profile
 });
 
 export const session = pgTable("session", {
@@ -84,3 +86,40 @@ export const comment = pgTable("comment", {
     .references(() => post.id),
   createdAt: timestamp("created_at").notNull(),
 });
+
+export const userRelations = relations(user, ({ many }) => ({
+  posts: many(post),
+  likes: many(like),
+  comments: many(comment),
+}));
+
+export const postRelations = relations(post, ({ one, many }) => ({
+  author: one(user, {
+    fields: [post.userId],
+    references: [user.id],
+  }),
+  likes: many(like),
+  comments: many(comment),
+}));
+
+export const likeRelations = relations(like, ({ one }) => ({
+  user: one(user, {
+    fields: [like.userId],
+    references: [user.id],
+  }),
+  post: one(post, {
+    fields: [like.postId],
+    references: [post.id],
+  }),
+}));
+
+export const commentRelations = relations(comment, ({ one }) => ({
+  author: one(user, {
+    fields: [comment.userId],
+    references: [user.id],
+  }),
+  post: one(post, {
+    fields: [comment.postId],
+    references: [post.id],
+  }),
+}));
