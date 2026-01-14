@@ -42,6 +42,7 @@ export async function getLeaderboard() {
     .select({
       userId: post.userId,
       totalLikes: sql<number>`sum(${post.likesCount})`.mapWith(Number),
+      totalPosts: count(post.id),
     })
     .from(post)
     .groupBy(post.userId)
@@ -72,6 +73,7 @@ export async function getLeaderboard() {
       username: userInfo?.username,
       image: userInfo?.image,
       totalLikes: entry.totalLikes,
+      totalPosts: entry.totalPosts,
       rank: index + 1,
     };
   });

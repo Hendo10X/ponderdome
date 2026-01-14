@@ -12,6 +12,7 @@ import { Heart, MessageSquare, Plus } from "lucide-react";
 import CommentModal from "@/components/comment-modal";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProfileView from "@/components/profile-view";
+import LeaderboardItem from "@/components/leaderboard-item";
 
 type Tab = "feed" | "leaderboard" | "profile";
 
@@ -21,6 +22,7 @@ type LeaderboardEntry = {
   username?: string | null;
   image?: string | null;
   totalLikes: number;
+  totalPosts: number;
   rank: number;
 };
 
@@ -209,18 +211,8 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
                  ) : (
                     <div className="w-full space-y-3">
                         {leaderboard.map((entry) => (
-                            <div key={entry.id} className="bg-white rounded-2xl p-4 flex items-center justify-between border border-gray-100">
-                                <div className="flex items-center space-x-4">
-                                    <span className="font-bold text-gray-900 w-8">#{entry.rank}</span>
-                                    <span className="font-bold text-gray-900">{entry.username || entry.name}</span>
-                                </div>
-                                    <div className="flex items-center space-x-3">
-                                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600">
-                                            {entry.totalLikes.toLocaleString()}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
+                          <LeaderboardItem key={entry.id} entry={entry} />
+                        ))}
                     </div>
                  )}
                </div>
