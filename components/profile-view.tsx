@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getUserStats, updateProfile } from "@/lib/actions";
-import { User, Edit2, Check, FileText, LogOut, Loader2 } from "lucide-react";
+import { User, Edit2, Check, FileText, Power, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { getRankDescription } from "@/lib/utils";
@@ -122,7 +122,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
                                 {isLoggingOut ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
                                 ) : (
-                                    <LogOut className="w-4 h-4" />
+                                    <Power className="w-4 h-4" />
                                 )}
                             </button>
                         </>
@@ -144,7 +144,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
                             {stats.rank?.title || "Unranked"}
                         </span>
                     </PopoverTrigger>
-                    <PopoverContent className="w-64">
+                    <PopoverContent className="w-64" align="start">
                         <div className="space-y-2">
                              <h4 className="font-medium leading-none text-gray-900 border-b border-gray-100 pb-2 mb-2">
                                 {stats.rank?.title || "Unranked"}
@@ -210,12 +210,11 @@ export default function ProfileView({ user }: ProfileViewProps) {
                 )}
             </div>
 
-            {/* Popular Post Highlight */}
             {stats.popularPost && (
-                <div>
+                <div className="text-left">
                      <h3 className="font-bold text-sm text-gray-900 mb-3">Most Popular Post</h3>
                      <div className="bg-gray-50 rounded-2xl p-5">
-                        <p className="text-sm text-gray-800 font-medium whitespace-pre-wrap">
+                        <p className="text-sm text-gray-800 font-medium whitespace-pre-wrap text-left">
                             "{stats.popularPost.content}"
                         </p>
                      </div>
