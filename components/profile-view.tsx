@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { getUserStats, updateProfile } from "@/lib/actions";
-import { User, Edit2, Check, Trophy, Heart, FileText } from "lucide-react";
+import { User, Edit2, Check, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
-import UserTooltip from "@/components/user-tooltip";
-import { formatDistanceToNow } from "date-fns";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { getRankDescription } from "@/lib/utils";
 
 interface ProfileViewProps {
   user: {
@@ -69,9 +68,9 @@ export default function ProfileView({ user }: ProfileViewProps) {
   if (!stats) return null;
 
   return (
-    <div className="w-full max-w-lg mx-auto pb-20 px-0 md:px-4">
+    <div className="w-full max-w-lg mx-auto pb-20 px-4">
       {/* Profile Card */}
-      <div className="bg-white rounded-none md:rounded-[32px] overflow-hidden mb-6 pt-8 min-h-[50vh]">
+      <div className="bg-white rounded-[32px] overflow-hidden mb-6 pt-8">
         {/* Content */}
         <div className="px-6 pb-8 relative">
             {/* Avatar & Edit Button */}
@@ -101,11 +100,28 @@ export default function ProfileView({ user }: ProfileViewProps) {
                 <p className="text-gray-500 font-medium">@{user.username}</p>
             </div>
 
-             {/* Rank Badge */}
+             {/* Rank Badge with Popover */}
              <div className="flex items-center gap-2 mb-6">
-                <span className={cn("px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600")}>
-                    {stats.rank?.title || "Unranked"}
-                </span>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <span className={cn("px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200 transition-colors select-none")}>
+                            {stats.rank?.title || "Unranked"}
+                        </span>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-64">
+                        <div className="space-y-2">
+                             <h4 className="font-medium leading-none text-gray-900 border-b border-gray-100 pb-2 mb-2">
+                                {stats.rank?.title || "Unranked"}
+                             </h4>
+                             <p className="text-sm text-gray-600 italic">
+                                "{getRankDescription(stats.rank?.title || "")}"
+                             </p>
+                             <div className="pt-2 text-xs text-gray-400 bg-gray-50 -mx-4 -mb-4 p-3 border-t border-gray-100 mt-2">
+                                <p><strong>How it works:</strong> Earn likes on your posts to climb the ranks and unlock new titles.</p>
+                             </div>
+                        </div>
+                    </PopoverContent>
+                </Popover>
              </div>
 
             {/* Stats Row */}
@@ -162,20 +178,10 @@ export default function ProfileView({ user }: ProfileViewProps) {
             {stats.popularPost && (
                 <div>
                      <h3 className="font-bold text-sm text-gray-900 mb-3">Most Popular Post</h3>
-                     <div className="bg-gray-50 rounded-2xl p-5 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-3 opacity-10">
-                            <Trophy className="w-16 h-16 text-yellow-500" />
-                        </div>
-                        <p className="text-sm text-gray-800 font-medium mb-3 relative z-10 line-clamp-3">
+                     <div className="bg-gray-50 rounded-2xl p-5">
+                        <p className="text-sm text-gray-800 font-medium whitespace-pre-wrap">
                             "{stats.popularPost.content}"
                         </p>
-                        <div className="flex items-center gap-4 text-xs font-bold text-gray-400 relative z-10">
-                            <div className="flex items-center gap-1">
-                                <Heart className="w-3.5 h-3.5 fill-red-400 text-red-400" />
-                                <span>{stats.popularPost.likesCount}</span>
-                            </div>
-                            <span>{formatDistanceToNow(new Date(stats.popularPost.createdAt), { addSuffix: true })}</span>
-                        </div>
                      </div>
                 </div>
             )}
