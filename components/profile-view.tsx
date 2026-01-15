@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { getUserStats, updateProfile } from "@/lib/actions";
-import { User, Edit2, Check, FileText } from "lucide-react";
+import { User, Edit2, Check, FileText, LogOut, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { getRankDescription } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 interface ProfileViewProps {
   user: {
@@ -33,6 +35,8 @@ export default function ProfileView({ user }: ProfileViewProps) {
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioInput, setBioInput] = useState("");
   const [savingBio, setSavingBio] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     getUserStats(user.id)
@@ -56,6 +60,23 @@ export default function ProfileView({ user }: ProfileViewProps) {
     }
   };
 
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push("/sign-in"); 
+                },
+            },
+        });
+    } catch (error) {
+        console.error("Logout failed", error);
+        setIsLoggingOut(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center pt-20 space-y-4">
@@ -73,7 +94,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
       <div className="bg-white rounded-[32px] overflow-hidden mb-6 pt-8">
         {/* Content */}
         <div className="px-6 pb-8 relative">
-            {/* Avatar & Edit Button */}
+            {/* Avatar & Actions */}
             <div className="flex justify-between items-start mb-6">
                 <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
                     {user.image ? (
@@ -84,14 +105,29 @@ export default function ProfileView({ user }: ProfileViewProps) {
                         </span>
                     )}
                 </div>
-                {!isEditingBio && (
-                    <button 
-                        onClick={() => setIsEditingBio(true)}
-                        className="p-2 rounded-full bg-gray-50 hover:bg-gray-100 text-gray-500 transition-colors"
-                    >
-                        <Edit2 className="w-4 h-4" />
-                    </button>
-                )}
+                <div className="flex gap-2">
+                    {!isEditingBio && (
+                        <>
+                            <button 
+                                onClick={() => setIsEditingBio(true)}
+                                className="p-2 rounded-full bg-gray-50 hover:bg-gray-100 text-gray-500 transition-colors"
+                            >
+                                <Edit2 className="w-4 h-4" />
+                            </button>
+                             <button 
+                                onClick={handleLogout}
+                                disabled={isLoggingOut}
+                                className="p-2 rounded-full bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                            >
+                                {isLoggingOut ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <LogOut className="w-4 h-4" />
+                                )}
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
 
             {/* Name & Username */}
