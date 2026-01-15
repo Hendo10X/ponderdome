@@ -29,3 +29,19 @@ export function getUserRank(likes: number): Rank {
   const sortedRanks = [...RANKS].sort((a, b) => b.minLikes - a.minLikes);
   return sortedRanks.find((rank) => likes >= rank.minLikes) || RANKS[0];
 }
+
+export function getRankDescription(title: string) {
+  switch (title) {
+    case "Dry Brain": return "Just stepped into the bathroom.";
+    case "Damp Thinker": return "You’ve got a little moisture, but no splash yet.";
+    case "Prickly Philosopher": return "The ideas are starting to tingle.";
+    case "Lather Legend": return "You’re really starting to foam up some genius.";
+    case "Loofah Lord": return "You’ve scrubbed away the surface-level thoughts.";
+    case "Soapbox Superstar": return "People are actually stopping to listen to you.";
+    case "Deep-Sea Diver": return "You’re thinking deeper than the average human.";
+    case "Soggy Sage": return "You have spent too much time in the shower.";
+    case "Prune-Fingered Prophet": return "Your skin is wrinkled, but your mind is sharp.";
+    case "The Big Drip": return "You are the undisputed King/Queen of the Dome.";
+    default: return "";
+  }
+}
