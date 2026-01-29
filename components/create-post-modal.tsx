@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Loader2 } from "lucide-react";
 import { createPost } from "@/lib/actions";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -76,13 +77,33 @@ export default function CreatePostModal({
                 <label className="block text-sm font-medium text-gray-500 mb-2">
                   What's occupying that gray matter?
                 </label>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Type something profound... or just complain about the weather."
-                  className="w-full h-32 p-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-ponder-blue/50 focus:border-ponder-blue resize-none text-gray-900 placeholder:text-gray-300 transition-all"
-                  autoFocus
-                />
+                <div className="relative">
+                  <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    onKeyDown={(e) => {
+                      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                        e.preventDefault();
+                        handleSubmit();
+                      }
+                    }}
+                    placeholder="Type something profound... or just complain about the weather."
+                    className="w-full h-32 p-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-ponder-blue/50 focus:border-ponder-blue resize-none text-gray-900 placeholder:text-gray-300 transition-all pr-4 pb-8"
+                    autoFocus
+                    maxLength={280}
+                  />
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 pointer-events-none opacity-50">
+                     <span className="text-[10px] font-bold bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded border border-gray-200">
+                        Ctrl + Enter
+                     </span>
+                     <span className="text-[10px] font-medium text-gray-400">to post</span>
+                  </div>
+                  <div className={cn("absolute bottom-3 right-3 text-xs font-medium transition-colors", 
+                      content.length > 250 ? "text-orange-500" : "text-gray-400"
+                  )}>
+                    {content.length}/280
+                  </div>
+                </div>
               </div>
 
               {/* Footer */}

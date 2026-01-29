@@ -4,12 +4,12 @@ export function AscendToEnlightenment() {
   return (
     <div className="w-full flex flex-col items-center py-8">
       <div className="text-center mb-12 space-y-3 max-w-2xl px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-ponder-black tracking-tight font-sans">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight font-sans">
           Ascend to
           <br />
           Enlightenment
         </h2>
-        <p className="text-lg text-ponder-charcoal">
+        <p className="text-lg text-muted-foreground">
           Become the best shower
           <br />
           thoughts master

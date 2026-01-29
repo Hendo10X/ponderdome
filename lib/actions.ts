@@ -299,3 +299,38 @@ export async function getUserStats(userId: string) {
     bio: userDetails?.bio || ""
   };
 }
+
+export async function deletePost(postId: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const userId = session.user.id;
+
+  // Verify ownership
+  const existingPost = await db.query.post.findFirst({
+    where: eq(post.id, postId),
+  });
+
+  if (!existingPost) {
+    throw new Error("Post not found");
+  }
+
+  if (existingPost.userId !== userId) {
+    throw new Error("Unauthorized: You do not own this post");
+  }
+
+  // Delete dependencies first (likes, comments) if cascade isn't set up in DB, 
+  // but assuming standard cascade or manual cleanup:
+  await db.delete(like).where(eq(like.postId, postId));
+  await db.delete(comment).where(eq(comment.postId, postId));
+  
+  // Delete the post
+  await db.delete(post).where(eq(post.id, postId));
+
+  revalidatePath("/dashboard");
+}
