@@ -128,7 +128,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
 
   return (
     <div className={cn(
-        "bg-gray-50 flex flex-col items-center pt-14 md:pt-24 relative w-full overflow-x-hidden",
+        "bg-background flex flex-col items-center pt-14 md:pt-24 relative w-full overflow-x-hidden",
         activeTab === "profile" ? "min-h-screen" : "h-screen overflow-hidden"
     )}>
       {/* Tabs */}
@@ -140,8 +140,8 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
             className={cn(
               "relative px-4 py-2 text-sm font-medium transition-colors duration-200",
               activeTab === tab.id
-                ? "text-white"
-                : "text-black hover:text-gray-800"
+                ? "text-primary-foreground"
+                : "text-foreground hover:text-foreground/80"
             )}
           >
             {activeTab === tab.id && (
@@ -191,7 +191,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
               <>
                 {!loading && posts.length === 0 ? (
                   <div className="flex flex-col items-center justify-center space-y-6 pt-10">
-                    <p className="text-gray-500 font-medium text-lg">
+                    <p className="text-muted-foreground font-medium text-lg">
                       There is nothing to see here fella.
                     </p>
                   </div>
@@ -200,7 +200,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
                     {/* Feed List */}
                     <div className="space-y-4">
                       {loading && posts.length === 0 ? (
-                        <div className="text-center text-gray-500 py-10">
+                        <div className="text-center text-muted-foreground py-10">
                           Loading thoughts...
                         </div>
                       ) : (
@@ -220,7 +220,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
             {activeTab === "leaderboard" && (
                <div className="flex flex-col items-center justify-center space-y-4 pt-10 pb-20">
                  {leaderboard.length === 0 ? (
-                    <p className="text-gray-900 font-medium">leaderboard(no leader yet)</p>
+                    <p className="text-foreground font-medium">leaderboard(no leader yet)</p>
                  ) : (
                     <div className="w-full space-y-3">
                         {leaderboard.map((entry) => (
@@ -244,7 +244,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           onClick={() => setIsModalOpen(true)}
-          className="fixed bottom-8 right-8 z-50 flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-100 text-gray-900 text-sm font-medium transition-all duration-500 ease-[0.23,1,0.32,1] hover:bg-[#6982FF] hover:text-white group"
+          className="fixed bottom-8 right-8 z-50 flex items-center gap-2 px-5 py-2.5 rounded-full bg-secondary text-secondary-foreground text-sm font-medium transition-all duration-500 ease-[0.23,1,0.32,1] hover:bg-primary hover:text-primary-foreground group"
         >
           <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
           <span>start creating</span>
@@ -314,7 +314,7 @@ function PostCard({ post, currentUserImage, currentUserId }: { post: Post; curre
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-            className="bg-white p-5 rounded-2xl border border-gray-100 transition-shadow relative"
+            className="bg-card p-5 rounded-2xl border border-border transition-shadow relative"
         >
         <div className="flex items-start">
             {/* Post Content */}
@@ -328,19 +328,19 @@ function PostCard({ post, currentUserImage, currentUserId }: { post: Post; curre
                         totalLikes: post.author.totalLikes,
                     }}
                     >
-                    <span className="font-bold text-gray-900 text-sm">
+                    <span className="font-bold text-foreground text-sm">
                         @{post.author.username || post.author.name}
                     </span>
                     </UserTooltip>
                 ) : (
-                    <span className="font-bold text-gray-500 text-sm">Unknown</span>
+                    <span className="font-bold text-muted-foreground text-sm">Unknown</span>
                 )}
                 </div>
                 {currentUserId === post.author?.id && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <button
-                            className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                            className="text-muted-foreground hover:text-destructive transition-colors p-1"
                             title="Delete post"
                         >
                             <Trash2 className="w-4 h-4" />
@@ -362,7 +362,7 @@ function PostCard({ post, currentUserImage, currentUserId }: { post: Post; curre
                 )}
                 </div>
 
-            <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap font-medium">
+            <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap font-medium">
                 {post.content}
             </p>
 

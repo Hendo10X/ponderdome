@@ -13,7 +13,7 @@ export function HowItWorks() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-sm md:max-w-5xl">
-        <div className="bg-white rounded-xl p-6 flex flex-col items-center text-center">
+        <div className="bg-card rounded-xl p-6 flex flex-col items-center text-center">
           <div className="mb-4 bg-yellow-50 p-3 rounded-full">
             <Bird className="w-8 h-8 text-[#FFCC00] fill-current" strokeWidth={1.5} />
           </div>
@@ -25,7 +25,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-6 flex flex-col items-center text-center">
+        <div className="bg-card rounded-xl p-6 flex flex-col items-center text-center">
           <div className="mb-4 bg-green-50 p-3 rounded-full">
             <Check className="w-8 h-8 text-[#00D74C]" strokeWidth={4} />
           </div>
@@ -37,7 +37,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-6 flex flex-col items-center text-center">
+        <div className="bg-card rounded-xl p-6 flex flex-col items-center text-center">
           <div className="mb-4 bg-purple-50 p-3 rounded-full">
             <Star className="w-8 h-8 text-[#9369FF] fill-current" strokeWidth={0} />
           </div>

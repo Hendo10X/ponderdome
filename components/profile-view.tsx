@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { getRankDescription } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/mode-toggle";
 
 interface ProfileViewProps {
   user: {
@@ -91,7 +92,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
   return (
     <div className="w-full max-w-lg mx-auto pb-20 px-4">
       {/* Profile Card */}
-      <div className="bg-white rounded-[32px] overflow-hidden mb-6 pt-8">
+      <div className="bg-card rounded-[32px] overflow-hidden mb-6 pt-8 border">
         {/* Content */}
         <div className="px-6 pb-8 relative">
             {/* Avatar & Actions */}
@@ -105,19 +106,20 @@ export default function ProfileView({ user }: ProfileViewProps) {
                         </span>
                     )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                     {!isEditingBio && (
                         <>
+                            <ModeToggle />
                             <button 
                                 onClick={() => setIsEditingBio(true)}
-                                className="p-2 rounded-full bg-gray-50 hover:bg-gray-100 text-gray-500 transition-colors"
+                                className="p-2 rounded-full bg-secondary hover:bg-secondary/80 text-secondary-foreground transition-colors"
                             >
                                 <Edit2 className="w-4 h-4" />
                             </button>
                              <button 
                                 onClick={handleLogout}
                                 disabled={isLoggingOut}
-                                className="p-2 rounded-full bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                                className="p-2 rounded-full bg-secondary hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50"
                             >
                                 {isLoggingOut ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -132,21 +134,21 @@ export default function ProfileView({ user }: ProfileViewProps) {
 
             {/* Name & Username */}
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
-                <p className="text-gray-500 font-medium">@{user.username}</p>
+                <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>
+                <p className="text-muted-foreground font-medium">@{user.username}</p>
             </div>
 
              {/* Rank Badge with Popover */}
              <div className="flex items-center gap-2 mb-6">
                 <Popover>
                     <PopoverTrigger asChild>
-                        <span className={cn("px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200 transition-colors select-none")}>
+                        <span className={cn("px-3 py-1 rounded-full text-xs font-bold bg-secondary text-secondary-foreground cursor-pointer hover:bg-secondary/80 transition-colors select-none")}>
                             {stats.rank?.title || "Unranked"}
                         </span>
                     </PopoverTrigger>
                     <PopoverContent className="w-64" align="start">
                         <div className="space-y-2">
-                             <h4 className="font-medium leading-none text-gray-900 border-b border-gray-100 pb-2 mb-2">
+                             <h4 className="font-medium leading-none text-foreground border-b border-border pb-2 mb-2">
                                 {stats.rank?.title || "Unranked"}
                              </h4>
                              <p className="text-sm text-gray-600 italic">
@@ -162,20 +164,20 @@ export default function ProfileView({ user }: ProfileViewProps) {
 
             {/* Stats Row */}
             <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
-                    <span className="text-2xl font-bold text-gray-900">{stats.totalPosts}</span>
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wide mt-1">Posts</span>
+                <div className="bg-secondary rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+                    <span className="text-2xl font-bold text-foreground">{stats.totalPosts}</span>
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-1">Posts</span>
                 </div>
-                <div className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
-                    <span className="text-2xl font-bold text-gray-900">{stats.totalLikes}</span>
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wide mt-1">Likes Earned</span>
+                <div className="bg-secondary rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+                    <span className="text-2xl font-bold text-foreground">{stats.totalLikes}</span>
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-1">Likes Earned</span>
                 </div>
             </div>
 
             {/* Bio Section */}
             <div className="mb-8">
                 <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-bold text-sm text-gray-900">About</h3>
+                    <h3 className="font-bold text-sm text-foreground">About</h3>
                     {isEditingBio && (
                         <div className="flex gap-2">
                             <button 
@@ -212,9 +214,9 @@ export default function ProfileView({ user }: ProfileViewProps) {
 
             {stats.popularPost && (
                 <div className="text-left">
-                     <h3 className="font-bold text-sm text-gray-900 mb-3">Most Popular Post</h3>
-                     <div className="bg-gray-50 rounded-2xl p-5">
-                        <p className="text-sm text-gray-800 font-medium whitespace-pre-wrap text-left">
+                     <h3 className="font-bold text-sm text-foreground mb-3">Most Popular Post</h3>
+                     <div className="bg-secondary rounded-2xl p-5">
+                        <p className="text-sm text-foreground font-medium whitespace-pre-wrap text-left">
                             "{stats.popularPost.content}"
                         </p>
                      </div>

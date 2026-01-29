@@ -36,12 +36,12 @@ export function FAQ() {
   return (
     <div className="w-full flex flex-col items-center py-12 max-w-xl mx-auto px-4">
       <div className="text-center mb-10 space-y-2">
-        <h2 className="text-3xl md:text-4xl font-bold text-ponder-black tracking-tight font-sans">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight font-sans">
           This might answer
           <br />
           your questions
         </h2>
-        <p className="text-base text-ponder-charcoal">
+        <p className="text-base text-muted-foreground">
           Some answers to common questions.
           <br />
           Not the one you're looking for? Ask here
@@ -52,19 +52,19 @@ export function FAQ() {
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl overflow-hidden transition-all duration-200"
+            className="bg-card rounded-xl overflow-hidden transition-all duration-200"
           >
             <button
               onClick={() => toggleFAQ(index)}
               className="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none"
             >
-              <span className="text-sm md:text-base font-medium text-ponder-black">
+              <span className="text-sm md:text-base font-medium text-foreground">
                 {faq.question}
               </span>
               {openIndex === index ? (
-                <ChevronUp className="w-5 h-5 text-ponder-charcoal" />
+                <ChevronUp className="w-5 h-5 text-muted-foreground" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-ponder-charcoal" />
+                <ChevronDown className="w-5 h-5 text-muted-foreground" />
               )}
             </button>
             <div
@@ -72,7 +72,7 @@ export function FAQ() {
                 openIndex === index ? "max-h-40 opacity-100 pb-4" : "max-h-0 opacity-0"
               }`}
             >
-              <p className="text-sm text-ponder-charcoal leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {faq.answer}
               </p>
             </div>

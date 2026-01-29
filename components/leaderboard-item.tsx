@@ -24,20 +24,20 @@ export default function LeaderboardItem({ entry }: LeaderboardItemProps) {
 
   return (
     <div className={cn(
-        "bg-white border-gray-100 overflow-hidden transition-all duration-300",
-        isOpen ? "rounded-[24px] border bg-gray-50" : "rounded-2xl border bg-opacity-60"
+        "bg-card border-border overflow-hidden transition-all duration-300",
+        isOpen ? "rounded-[24px] border bg-accent/50" : "rounded-2xl border bg-card"
     )}>
       {/* Main Row */}
-      <div className={cn("flex items-center justify-between p-4", isOpen ? "bg-gray-50" : "bg-white")}>
+      <div className={cn("flex items-center justify-between p-4", isOpen ? "bg-accent/50" : "bg-card")}>
         <div className="flex items-center gap-4">
             {/* Rank */}
-            <span className="font-medium text-gray-900 w-6 text-center text-sm">
+            <span className="font-medium text-foreground w-6 text-center text-sm">
                 #{entry.rank}
             </span>
             
             {/* User Info */}
             <div className="flex flex-col">
-                <span className="font-medium text-gray-900 text-sm">
+                <span className="font-medium text-foreground text-sm">
                     {entry.username || entry.name}
                 </span>
             </div>
@@ -49,8 +49,8 @@ export default function LeaderboardItem({ entry }: LeaderboardItemProps) {
             className={cn(
                 "px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 outline-none",
                 isOpen 
-                    ? "bg-gray-200 text-gray-900" 
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-secondary text-secondary-foreground" 
+                    : "bg-secondary/50 text-muted-foreground hover:bg-secondary"
             )}
         >
             {entry.totalLikes.toLocaleString()}
@@ -65,16 +65,16 @@ export default function LeaderboardItem({ entry }: LeaderboardItemProps) {
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="bg-gray-50"
+                className="bg-accent/50"
             >
-                <div className="grid grid-cols-2 divide-x divide-gray-100 p-4">
+                <div className="grid grid-cols-2 divide-x divide-border p-4">
                     <div className="flex flex-col items-center justify-center text-center px-4">
-                        <span className="text-xl font-medium text-gray-900">{entry.totalLikes.toLocaleString()}</span>
-                        <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mt-1">Value Created</span>
+                        <span className="text-xl font-medium text-foreground">{entry.totalLikes.toLocaleString()}</span>
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mt-1">Value Created</span>
                     </div>
                     <div className="flex flex-col items-center justify-center text-center px-4">
-                        <span className="text-xl font-medium text-gray-900">{entry.totalPosts.toLocaleString()}</span>
-                        <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium mt-1">Thoughts</span>
+                        <span className="text-xl font-medium text-foreground">{entry.totalPosts.toLocaleString()}</span>
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mt-1">Thoughts</span>
                     </div>
                 </div>
             </motion.div>
