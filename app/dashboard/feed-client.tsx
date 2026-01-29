@@ -7,12 +7,25 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CreatePostModal from "@/components/create-post-modal";
 import UserTooltip from "@/components/user-tooltip";
-import { getFeed, toggleLike } from "@/lib/actions";
-import { Heart, MessageSquare, Plus } from "lucide-react";
+import { getFeed, toggleLike, deletePost } from "@/lib/actions";
+import { Heart, MessageSquare, Plus, Trash2 } from "lucide-react";
 import CommentModal from "@/components/comment-modal";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ProfileView from "@/components/profile-view";
+
 import LeaderboardItem from "@/components/leaderboard-item";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Tab = "feed" | "leaderboard" | "profile";
 
@@ -193,7 +206,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
                       ) : (
                         <>
                           {posts.map((post) => (
-                            <PostCard key={post.id} post={post} currentUserImage={user.image} />
+                            <PostCard key={post.id} post={post} currentUserImage={user.image} currentUserId={user.id} />
                           ))}
                           <div className="h-20" />
                         </>
@@ -247,7 +260,7 @@ export default function FeedClient({ user, initialPosts, initialLeaderboard }: F
   );
 }
 
-function PostCard({ post, currentUserImage }: { post: Post; currentUserImage?: string | null }) {
+function PostCard({ post, currentUserImage, currentUserId }: { post: Post; currentUserImage?: string | null; currentUserId: string }) {
   const router = useRouter();
   const [likes, setLikes] = useState(post.likesCount); 
   const [commentsCount, setCommentsCount] = useState(post.commentsCount || 0);
@@ -283,6 +296,17 @@ function PostCard({ post, currentUserImage }: { post: Post; currentUserImage?: s
       router.refresh(); // Refresh server data
   };
 
+  const handleDelete = async () => {
+      try {
+          await deletePost(post.id);
+          router.refresh();
+          toast.success("Post deleted");
+      } catch (e) {
+          console.error("Failed to delete post", e);
+          toast.error("Failed to delete post");
+      }
+  };
+
   return (
     <>
         <motion.div 
@@ -312,7 +336,31 @@ function PostCard({ post, currentUserImage }: { post: Post; currentUserImage?: s
                     <span className="font-bold text-gray-500 text-sm">Unknown</span>
                 )}
                 </div>
-            </div>
+                {currentUserId === post.author?.id && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button
+                            className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                            title="Delete post"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Post?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your post and remove it from our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleDelete} className="bg-red-500 hover:bg-red-600">Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                )}
+                </div>
 
             <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap font-medium">
                 {post.content}
