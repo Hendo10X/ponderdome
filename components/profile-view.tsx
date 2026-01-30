@@ -9,6 +9,7 @@ import { getRankDescription } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/mode-toggle";
+import { UserAvatar } from "@/components/user-avatar";
 
 interface ProfileViewProps {
   user: {
@@ -101,9 +102,13 @@ export default function ProfileView({ user }: ProfileViewProps) {
                     {user.image ? (
                             <img src={user.image} alt={user.username || "User"} className="w-full h-full object-cover" />
                     ) : (
-                        <span className="text-3xl font-bold text-gray-300">
-                            {(user.username?.[0] || user.name?.[0] || "U").toUpperCase()}
-                        </span>
+                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                            <UserAvatar 
+                                username={user.username || user.name || "User"} 
+                                size={96}
+                                className="w-full h-full flex items-center justify-center p-2"
+                            />
+                        </div>
                     )}
                 </div>
                 <div className="flex gap-2 items-center">
